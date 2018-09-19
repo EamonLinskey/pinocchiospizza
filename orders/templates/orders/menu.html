@@ -1,0 +1,97 @@
+{% extends "orders/base.html" %}
+
+{% block body %}
+	<h1>Pizzas</h1>
+	{% for pizza in pizzas %}
+		<h2>{{pizza.style}}</h2>
+		<table>
+			<tr>
+				<th>Toppings</th>
+				<th>Small</th> 
+				<th>Large</th>
+			</tr>
+			{% for obj in pizza.style.PriceList.listToppings %}
+			<tr>
+				<td>{% cycle 'Cheese' 'One Topping' 'Two Toppings' 'Three Toppings' 'Special'%}</td>
+				<td>${{obj.small}}</td>
+				<td>${{obj.large}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	{% endfor %}
+
+	<h1>Toppings</h1>
+		<table>
+			{% for topping in toppings %}
+			<ul>
+				<li>{{topping}}</li>
+			</ul>
+			{% endfor %}
+		</table>
+
+	<h1>Subs</h1>
+		<table>
+			<tr>
+				<th>Sub</th>
+				<th>Small</th> 
+				<th>Large</th>
+			</tr>
+		{% for sub in subs %}
+			<tr>
+				<td>{{sub}}</td>
+				{% if sub.size.small != None %}
+				<td>${{sub.size.small}}</td>
+				{% else %}
+				<td>------</td>
+				{% endif %}
+				<td>${{sub.size.large}}</td>
+			</tr>
+		{% endfor %}
+		</table>
+
+	<h1>Pastas</h1>
+		<table>
+			<tr>
+				<th>Pasta</th>
+				<th>Price</th> 
+			</tr>
+		{% for pasta in pastas %}
+			<tr>
+				<td>{{pasta}}</td>
+				<td>${{pasta.price}}</td>
+			</tr>
+		{% endfor %}
+		</table>
+
+	<h1>Salads</h1>
+		<table>
+			<tr>
+				<th>Salad</th>
+				<th>Price</th> 
+			</tr>
+		{% for salad in salads %}
+			<tr>
+				<td>{{salad}}</td>
+				<td>${{salad.price}}</td>
+			</tr>
+		{% endfor %}
+		</table>
+
+	<h1>Dinner Platters</h1>
+		<table>
+			<tr>
+				<th>Platter</th>
+				<th>Small</th> 
+				<th>Large</th>
+			</tr>
+		{% for platter in dinnerPlatters %}
+			<tr>
+				<td>{{platter}}</td>
+				<td>${{platter.size.small}}</td>
+				<td>${{platter.size.large}}</td>
+			</tr>
+		{% endfor %}
+		</table>
+
+
+{% endblock %}
