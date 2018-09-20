@@ -6,6 +6,16 @@ from django.contrib.auth.models import User
 from .models import ToppingList, Price, Style, Pizza, Topping, Pasta, Salad, DinnerPlatter, Sub, Extra
 import re
 
+foodContext = {
+    	"pizzas": Pizza.objects.all(),
+    	"subs": Sub.objects.all(),
+    	"toppings": Topping.objects.all(),
+    	"pastas": Pasta.objects.all(),
+    	"salads": Salad.objects.all(),
+    	"dinnerPlatters": DinnerPlatter.objects.all(),
+    	"menu": [Pizza.objects.all(), Sub.objects.all(), Pasta.objects.all(), Salad.objects.all(),  DinnerPlatter.objects.all()]
+    }
+
 
 # Create your views here.
 def index(request):
@@ -32,7 +42,7 @@ def signedIn(request):
 
 def orders(request):
 	if request.user.is_authenticated:
-		return render(request, "orders/orders.html")
+		return render(request, "orders/orders.html", foodContext)
 	else:
 		return HttpResponseRedirect(reverse("signIn"))
 
@@ -82,16 +92,7 @@ def registered(request):
 		return HttpResponseRedirect(reverse("orders"))
 
 def menu(request):
-	context = {
-    	"pizzas": Pizza.objects.all(),
-    	"subs": Sub.objects.all(),
-    	"toppings": Topping.objects.all(),
-    	"pastas": Pasta.objects.all(),
-    	"salads": Salad.objects.all(),
-    	"dinnerPlatters": DinnerPlatter.objects.all()
-
-    }
-	return render(request, "orders/menu.html", context)
+	return render(request, "orders/menu.html", foodContext)
 
 
 

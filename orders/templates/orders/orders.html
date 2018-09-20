@@ -2,8 +2,71 @@
 
 {% block body %}
 <h1>Hello, {{ user.username }}</h1>
-<ul>
-    <li>Let's place an order!</li>
-    <li><a href="{% url 'signOut' %}">Logout</a></li>
-</ul>
+<p>What would you like today?</p>
+
+<div class ="container">
+	<div class="food-container">
+		<div class="text-center food-link">Pizzas</div>
+	</div>
+	<div class="food-container">
+		<div class="text-center food-link">Subs</div>
+	</div>
+	<div class="food-container">
+		<div class="text-center food-link">Pastas</div>
+	</div>
+	<div class="food-container">
+		<div class="text-center food-link">Salads</div>
+	</div>
+	<div class="food-container">
+		<div class="text-center food-link">Dinner Platters</div>
+	</div>
+</div>
+
+<!-- The Modal -->
+<div id="modal" class="modal">
+
+<!-- Modal content -->
+	<div class="modal-content">
+		<div class="modal-header">
+			<h2>Modal Header</h2>
+	  		<span class="close">&times;</span>
+		</div>
+		<div class="modal-body">
+			<h2>Pizza</h2>
+			<div>	
+				<form>
+				    <fieldset>
+				        <legend>Select a Type</legend>
+				        {% for pizza in pizzas %}
+				            <input type="radio" id="{{pizza.style}}" name="style" value="{{pizza.style}}"/>
+				            <label for="{{pizza.style}}">{{pizza.style}}</label>
+				        {% endfor %}
+				    </fieldset>
+				</form>
+			</div>
+			<div>	
+				<form>
+				    <fieldset>
+				        <legend>Select a Your Toppings</legend>
+				        {% for topping in toppings %}
+				            <input type="checkbox" id="{{topping}}" name="topping" value="{{topping}}"/>
+				            <label for="{{topping}}">{{topping}}</label>
+				        {% endfor %}
+				    </fieldset>
+				</form>
+			</div>
+			<div>	
+				<form>
+				    <fieldset>
+				        <legend>Select a Your Size</legend>
+				        <input type="radio" id="small" name="size" value="small"/>
+				        <label for="small">Small</label>
+				        <input type="radio" id="large" name="size" value="large"/>
+				        <label for="large">large</label>
+				    </fieldset>
+				</form>
+			</div>
+		</div>
+  	</div>
+</div>
 {% endblock %}
