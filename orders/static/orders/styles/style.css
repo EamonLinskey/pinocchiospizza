@@ -1,11 +1,24 @@
 .food-container{
-	background-color: lightgrey;
+    background-color: lightgrey;
 	border: 1px solid black;
-  margin: 1%;
-  padding: 5%;
-  width: 47%;
-  display: inline-block;
+    margin: 1%;
+    padding: 5%;
+    width: 47%;
+    display: inline-block;
 }
+
+.menu-container{
+    background-color: lightgrey;
+    border: 1px solid black;
+    margin: 2% auto 2% auto;
+    width: 80vw;
+}
+
+.menu-table{
+    margin: auto;
+    width: 25%;
+}
+
 
 .inner-pizza-container{
 	background-color: darkgrey;

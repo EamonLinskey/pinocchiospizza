@@ -3,17 +3,12 @@ from django.shortcuts import render
 from django.urls import reverse 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import ToppingList, Price, Style, Pizza, Topping, Pasta, Salad, DinnerPlatter, Sub, Extra
+from .models import PriceList, Style, Food, Extra
 import re
 
 foodContext = {
-    	"pizzas": Pizza.objects.all(),
-    	"subs": Sub.objects.all(),
-    	"toppings": Topping.objects.all(),
-    	"pastas": Pasta.objects.all(),
-    	"salads": Salad.objects.all(),
-    	"dinnerPlatters": DinnerPlatter.objects.all(),
-    	"menu": [Pizza.objects.all(), Sub.objects.all(), Pasta.objects.all(), Salad.objects.all(),  DinnerPlatter.objects.all()]
+    	"foods": Food.objects.all(),
+    	"extras": Extra.objects.all()
     }
 
 
