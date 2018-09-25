@@ -1,0 +1,67 @@
+{% extends "orders/base.html" %}
+
+{% block body %}
+<h1>Hello, {{ user.username }}</h1>
+<p>What would you like today?</p>
+
+<div class ="container">
+	{% for food in foods %}
+		{% for style in food.style.all %}
+			<div class="food-container">
+				<div class="text-center food-link">{{style}}</div>
+			</div>
+		{% endfor %}
+	{% endfor %}
+
+</div>
+
+{% for food in foods %}
+	{% for style in food.style.all %}
+		<!-- The Modal -->
+		<div id="{{style.trim}}-modal" class="modal">
+			<!-- Modal content -->
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2 class="style" >{{style}}</h2>
+					<span class="close">&times;</span>
+				</div>
+				<div class="modal-body">
+					<div class="current-price">{{style.sizeList.small.noExtra}}</div>
+					{% if style.legalExtras.all%}
+						<div>Extras:</div>
+						<div>
+							{% for extra in style.legalExtras.all %}
+								<input class="extra-check" type="checkbox" id="{{extra}}" name="extra" value="{{extra}}">
+						        <label for="{{extra}}">{{extra}}</label>
+							{% endfor %}
+						</div>
+					{% endif %}
+					{% if style.sizeList.sizes|length > 1 %}
+						<div>Size:</div>
+						<form>
+						{% for size in style.sizeList.sizes %}
+						 	<input class="size-radio" type="radio" id="{{size}}" name="size" value="{{size}}">
+					        <label for="{{size}}">{{size}}</label>
+					    {% endfor %}
+					    </form>
+					{% endif %}
+					<select class="quantity">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+					<button class="addToCart btn btn-success">Add to Cart</button>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+{% endfor %}
+
+{% endblock %}

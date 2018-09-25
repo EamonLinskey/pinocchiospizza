@@ -1,9 +1,10 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
+from django.core import serializers
 from django.shortcuts import render
 from django.urls import reverse 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import PriceList, Style, Food, Extra
+from .models import PriceList, SizeList, Style, Food, Extra
 import re
 
 foodContext = {
@@ -89,5 +90,28 @@ def registered(request):
 def menu(request):
 	return render(request, "orders/menu.html", foodContext)
 
+def style(request, food):
+	context={
+		"foods": Food.objects.all().filter(name=food.title())
+	}
+	if request.user.is_authenticated:
+		return render(request, "orders/styles.html", context)
+	else:
+		return HttpResponseRedirect(reverse("signIn"))
 
+def prices(request, food, style, size, numTop):
+	if request.user.is_authenticated:
+		selectedFood = Food.objects.all().filter(name=food.title())[0]
+		selectedStyle = selectedFood.style.all().filter(name=style.title())[0]
+		selectedSizeList = getattr(selectedStyle.sizeList, size.lower())
+		selectedPrice = getattr(selectedSizeList, numTop)
 
+		return HttpResponse(selectedPrice, content_type='application/json')
+	else:
+		return HttpResponseRedirect(reverse("signIn"))
+
+def updateCart(request):
+	if not request.is_ajax() or not request.method=='POST':
+		return HttpResponseRedirect(reverse("index"))
+	request.session['order'] = 'myvalue'
+	return HttpResponse(200)

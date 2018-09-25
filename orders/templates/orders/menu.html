@@ -16,28 +16,28 @@
 								</tr>
 								<tr>
 									<td>Cheese</td>
-							    	<td>${{style.priceList.smallNoExtra}}</td> 
-							    	<td>${{style.priceList.largeNoExtra}}</td>
+							    	<td>${{style.sizeList.small.noExtra}}</td> 
+							    	<td>${{style.sizeList.large.noExtra}}</td>
 								</tr>
 								<tr>
 									<td>1 Topping</td>
-							    	<td>${{style.priceList.smallOneExtra}}</td> 
-							    	<td>${{style.priceList.largeOneExtra}}</td>
+							    	<td>${{style.sizeList.small.oneExtra}}</td> 
+							    	<td>${{style.sizeList.large.oneExtra}}</td>
 								</tr>
 								<tr>
 									<td>2 Toppings</td>
-							    	<td>${{style.priceList.smallTwoExtra}}</td> 
-							    	<td>${{style.priceList.largeTwoExtra}}</td>
+							    	<td>${{style.sizeList.small.twoExtra}}</td> 
+							    	<td>${{style.sizeList.large.twoExtra}}</td>
 								</tr>
 								<tr>
 									<td>3 Toppings</td>
-							    	<td>${{style.priceList.smallThreeExtra}}</td> 
-							    	<td>${{style.priceList.largeThreeExtra}}</td>
+							    	<td>${{style.sizeList.small.threeExtra}}</td> 
+							    	<td>${{style.sizeList.large.threeExtra}}</td>
 								</tr>
 								<tr>
 									<td>Special</td>
-							    	<td>${{style.priceList.smallSpecial}}</td> 
-							    	<td>${{style.priceList.largeSpecial}}</td>
+							    	<td>${{style.sizeList.small.special}}</td> 
+							    	<td>${{style.sizeList.large.special}}</td>
 								</tr>
 							</table>
 							{% if style.name == "Sicilian" %}
@@ -56,14 +56,14 @@
 							    	<th>Large</th>
 								</tr>
 								<tr>
-									{% if style.priceList.smallNoExtra != None %}
-							    		<td>${{style.priceList.smallNoExtra}}</td>
+									{% if style.sizeList.small.noExtra != None %}
+							    		<td>${{style.sizeList.small.noExtra}}</td>
 							    	{% else %} 
 							    		<td>-----</td>
 							    	{% endif %}
 
-							    	{% if style.priceList.largeNoExtra != None %}
-							    		<td>${{style.priceList.largeNoExtra}}</td>
+							    	{% if style.sizeList.large.noExtra != None %}
+							    		<td>${{style.sizeList.large.noExtra}}</td>
 							    	{% else %} 
 							    		<td>-----</td>
 							    	{% endif %}
@@ -75,7 +75,7 @@
 						{% else %}
 							<table class="menu-table">
 								<tr>
-									<td>${{style.priceList.smallNoExtra}}</td>
+									<td>${{style.sizeList.small.noExtra}}</td>
 								</tr>
 							</table>
 						

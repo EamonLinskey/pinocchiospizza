@@ -2,19 +2,32 @@ from django.db import models
 
 # Create your models here.
 class PriceList(models.Model):
-	smallNoExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-	largeNoExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-	smallOneExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-	largeOneExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-	smallTwoExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-	largeTwoExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-	smallThreeExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-	largeThreeExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-	smallSpecial = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-	largeSpecial = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+	noExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+	oneExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+	twoExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+	threeExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+	special = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
 	def __str__(self):
-		return f'{self.smallNoExtra}, {self.largeNoExtra}, {self.smallOneExtra}, {self.largeOneExtra} {self.smallTwoExtra}, {self.largeTwoExtra}, {self.smallThreeExtra}, {self.largeThreeExtra}, {self.smallSpecial}, {self.largeSpecial}'
+		return f'{self.noExtra}, {self.oneExtra}, {self.twoExtra}, {self.threeExtra}, {self.special}'
+	@property
+	def fields(self):
+		return [f.name for f in self._meta.fields]
+	
 
+class SizeList(models.Model):
+	name = models.CharField(max_length=32)
+	small = models.ForeignKey(PriceList, on_delete=models.CASCADE, null=True, blank=True, related_name='smallPrices')
+	large = models.ForeignKey(PriceList, on_delete=models.CASCADE, null=True, blank=True, related_name='largePrices')
+	def __str__(self):
+		return f'{self.name}'
+	@property
+	def sizes(self):
+		sizes = []
+		if self.small != None:
+			sizes.append("Small")
+		if self.large != None:
+			sizes.append("Large")
+		return sizes
 
 class Extra(models.Model):
 	name = models.CharField(max_length=32)
@@ -23,10 +36,12 @@ class Extra(models.Model):
 
 class Style(models.Model):
 	name = models.CharField(max_length=32)
-	priceList = models.ForeignKey(PriceList, on_delete=models.CASCADE)
-	legalExtras = models.ManyToManyField(Extra)
+	sizeList = models.ForeignKey(SizeList, on_delete=models.CASCADE)
+	legalExtras = models.ManyToManyField(Extra, blank=True)
 	def __str__(self):
    		return f'{self.name}'
+	def trim(self):
+		return self.name.replace(" ", "")
 
 class Food(models.Model):
 	name = models.CharField(max_length=32)
