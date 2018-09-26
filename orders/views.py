@@ -6,11 +6,26 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import PriceList, SizeList, Style, Food, Extra
 import re
+import json
 
 foodContext = {
     	"foods": Food.objects.all(),
     	"extras": Extra.objects.all()
     }
+
+class Item:
+	def __init__(self, food, style, size, toppings, numToppings, quantity):
+		self.food = food
+		self.style = style	
+		self.size = size
+		self.toppings = toppings
+		self.numToppings = numToppings
+		self.quantity = quantity
+		self.key = food+style+size+''.join(toppings)+numToppings
+	def addQuantity(i):
+		self.quantity += i
+	def toList(self):
+		return [self.food, self.style, self.size, self.toppings, self.numToppings, self.quantity] 
 
 
 # Create your views here.
@@ -101,8 +116,8 @@ def style(request, food):
 
 def prices(request, food, style, size, numTop):
 	if request.user.is_authenticated:
-		selectedFood = Food.objects.all().filter(name=food.title())[0]
-		selectedStyle = selectedFood.style.all().filter(name=style.title())[0]
+		selectedFood = Food.objects.all().filter(name__iexact=food)[0]
+		selectedStyle = selectedFood.style.all().filter(name__iexact=style)[0]
 		selectedSizeList = getattr(selectedStyle.sizeList, size.lower())
 		selectedPrice = getattr(selectedSizeList, numTop)
 
@@ -110,8 +125,24 @@ def prices(request, food, style, size, numTop):
 	else:
 		return HttpResponseRedirect(reverse("signIn"))
 
+
 def updateCart(request):
 	if not request.is_ajax() or not request.method=='POST':
 		return HttpResponseRedirect(reverse("index"))
-	request.session['order'] = 'myvalue'
+	print(request.POST.getlist('toppings[]'))
+	newItem = Item(request.POST["food"].replace('%20', ' '), request.POST["style"], request.POST["size"], request.POST.getlist('toppings[]'), request.POST["numToppings"], request.POST["quantity"])
+	print(json.dumps(newItem, default=lambda o: o.__dict__))
+	isUnique = True
+	order = request.session.get('order')
+	if (order):
+		for item in json.loads(order):
+			if item.key == newItem.key:
+				item.addQuantity(newItem.quantity)
+				isUnique = False
+		if isUnique:
+			request.session['order'].append([json.dumps(newItem, default=lambda o: o.__dict__)])
+	else:
+		request.session['order'] = [json.dumps(newItem, default=lambda o: o.__dict__)]
+	
+	print(json.loads(request.session['order'][0])["food"])
 	return HttpResponse(200)

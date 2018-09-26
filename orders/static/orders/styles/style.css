@@ -7,6 +7,10 @@
     display: inline-block;
 }
 
+.food-link{
+    text-decoration: none !important;
+}
+
 .menu-container{
     background-color: lightgrey;
     border: 1px solid black;

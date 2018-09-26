@@ -1,5 +1,10 @@
 {% extends "orders/base.html" %}
 
+{% block head %}
+	{% load static %}
+	<script src={% static "orders/scripts/styles.js" %}></script>
+{% endblock %}
+
 {% block body %}
 <h1>Hello, {{ user.username }}</h1>
 <p>What would you like today?</p>
@@ -26,7 +31,7 @@
 					<span class="close">&times;</span>
 				</div>
 				<div class="modal-body">
-					<div class="current-price">{{style.sizeList.small.noExtra}}</div>
+					<div class="current-price">${{style.sizeList.small.noExtra}}</div>
 					{% if style.legalExtras.all%}
 						<div>Extras:</div>
 						<div>
