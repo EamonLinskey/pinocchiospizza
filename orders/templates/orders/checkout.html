@@ -1,0 +1,29 @@
+{% extends "orders/base.html" %}
+
+{% block head %}
+{% load static %}
+<script src={% static "orders/scripts/checkout.js" %}></script>
+	
+
+{% endblock %}
+
+{% block body %}
+
+<div>
+	Street Address <input type="text" name="address" class="input address"><br>
+	Apt Number:<input type="text" name="apt-num" class="input apt-num"><br>
+	City: 
+	<select class="city input">
+		<option value="Cambridge">Cambridge</option>
+		<option value="Boston">Boston</option>
+	</select>
+	Zip Code: <input type="text" name="zip-code" class="zip-code input"><br>
+	Devlvery Instructions:<input type="text" name="del-inst" class="del-inst input"><br>
+	Phone Number: <input class="phone input" type="text" name="phone">
+	Payment: 
+	<input type="radio" name="payment" value="cash">Cash<br>
+	<input type="radio" name="payment" value="card">Card<br>
+	<input type="submit" value="Submit" class="submit">
+</div>
+
+{% endblock %}

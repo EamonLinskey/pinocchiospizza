@@ -7,6 +7,50 @@
     display: inline-block;
 }
 
+.navbar, .cart{
+    height: 50px;
+}
+
+.cart-container{
+    position: relative;
+}
+
+.add{
+    background: green;
+} 
+
+.subtract {
+    background: red;
+}
+
+.add, .subtract, .order-number{
+    border-radius: 0.7em;
+    margin-right: 5px;
+    text-align: center;
+    display: inline-block;
+    font-weight: bold;
+    line-height: 1.4em;
+    width: 1.4em; 
+    -moz-border-radius: 0.7em;
+    -webkit-border-radius: 0.7em;
+}
+
+.order{
+    background-color: lightgrey;
+    border: 1px solid black;
+    margin: 1%;
+    padding: 1%;
+    width: 100%;
+    display: inline-block;
+}
+
+.order-number{
+    background: green;
+    position: absolute;
+    bottom: 10%;
+    left: 70%;
+}
+
 .food-link{
     text-decoration: none !important;
 }

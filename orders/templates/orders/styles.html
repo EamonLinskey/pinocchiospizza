@@ -41,7 +41,6 @@
 							{% endfor %}
 						</div>
 					{% endif %}
-					{% if style.sizeList.sizes|length > 1 %}
 						<div>Size:</div>
 						<form>
 						{% for size in style.sizeList.sizes %}
@@ -49,7 +48,6 @@
 					        <label for="{{size}}">{{size}}</label>
 					    {% endfor %}
 					    </form>
-					{% endif %}
 					<select class="quantity">
 						<option value="1">1</option>
 						<option value="2">2</option>

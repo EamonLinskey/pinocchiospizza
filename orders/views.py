@@ -13,6 +13,9 @@ foodContext = {
     	"extras": Extra.objects.all()
     }
 
+OrdersToFill = []
+orderCount = 0
+
 class Item:
 	def __init__(self, food, style, size, toppings, numToppings, quantity):
 		self.food = food
@@ -125,24 +128,56 @@ def prices(request, food, style, size, numTop):
 	else:
 		return HttpResponseRedirect(reverse("signIn"))
 
+def cart(request):
+	if request.user.is_authenticated:
+		return render(request, "orders/cart.html")
+	else:
+		return HttpResponseRedirect(reverse("signIn"))
 
-def updateCart(request):
+def checkout(request):
+	if request.user.is_authenticated:
+		return render(request, "orders/checkout.html")
+	else:
+		return HttpResponseRedirect(reverse("signIn"))
+
+
+def sendOrder(request):
+	global orderCount
+
 	if not request.is_ajax() or not request.method=='POST':
 		return HttpResponseRedirect(reverse("index"))
-	print(request.POST.getlist('toppings[]'))
-	newItem = Item(request.POST["food"].replace('%20', ' '), request.POST["style"], request.POST["size"], request.POST.getlist('toppings[]'), request.POST["numToppings"], request.POST["quantity"])
-	print(json.dumps(newItem, default=lambda o: o.__dict__))
-	isUnique = True
-	order = request.session.get('order')
-	if (order):
-		for item in json.loads(order):
-			if item.key == newItem.key:
-				item.addQuantity(newItem.quantity)
-				isUnique = False
-		if isUnique:
-			request.session['order'].append([json.dumps(newItem, default=lambda o: o.__dict__)])
 	else:
-		request.session['order'] = [json.dumps(newItem, default=lambda o: o.__dict__)]
+		info = []
+		order = json.loads(request.POST["order"])
+		for item in request.POST:
+			if item != "order":
+				info.append(request.POST[item])
+		OrdersToFill.append([order, info, orderCount])
+		orderCount += 1
+		print(OrdersToFill)
+		#OrdersToFill.append(order)
+		return HttpResponse(200)
+
+def allOrders (request):
+	if request.user.is_superuser:
+		print(OrdersToFill)
+		return render(request, "orders/allOrders.html", {orders: OrdersToFill})
+	else:
+		return HttpResponseRedirect(reverse("index"))
+	# print(request.POST.getlist('toppings[]'))
+	# newItem = Item(request.POST["food"].replace('%20', ' '), request.POST["style"], request.POST["size"], request.POST.getlist('toppings[]'), request.POST["numToppings"], request.POST["quantity"])
+	# print(json.dumps(newItem, default=lambda o: o.__dict__))
+	# isUnique = True
+	# order = request.session.get('order')
+	# if (order):
+	# 	for item in json.loads(order):
+	# 		if item.key == newItem.key:
+	# 			item.addQuantity(newItem.quantity)
+	# 			isUnique = False
+	# 	if isUnique:
+	# 		request.session['order'].append([json.dumps(newItem, default=lambda o: o.__dict__)])
+	# else:
+	# 	request.session['order'] = [json.dumps(newItem, default=lambda o: o.__dict__)]
 	
-	print(json.loads(request.session['order'][0])["food"])
-	return HttpResponse(200)
+	# print(json.loads(request.session['order'][0])["food"])
+	# return HttpResponse(200)

@@ -1,0 +1,29 @@
+{% extends "orders/base.html" %}
+
+{% block head %}
+
+{% load static %}
+<script src={% static "orders/scripts/cart.js" %}></script>
+
+{% endblock %}
+
+{% block body %}
+<h1>Hello, {{ user.username }}</h1>
+<p>Heres your cart</p>
+
+<div class ="orders-container">
+	Cart
+</div>
+<div class ="subtotal-container">
+	$<span class="subtotal">0.00<span>
+</div>
+<div class ="tax-container">
+	$<span class="tax">0.00<span>
+</div>
+<div class ="total-container">
+	$<span class="total">0.00<span>
+</div>
+
+<a class="btn btn-success" href="{% url 'checkout' %}">Submit Order</a>
+
+{% endblock %}

@@ -1,54 +1,3 @@
-// using jQuery
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-var csrftoken = getCookie('csrftoken');
-
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-
-function sameOrigin(url) {
-    // test that a given url is a same-origin URL
-    // url could be relative or scheme relative or absolute
-    var host = document.location.host; // host + port
-    var protocol = document.location.protocol;
-    var sr_origin = '//' + host;
-    var origin = protocol + sr_origin;
-    // Allow absolute or scheme relative URLs to same origin
-    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
-        // or any other URL that isn't scheme relative or absolute i.e relative.
-        !(/^(\/\/|http:|https:).*/.test(url));
-}
-
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
-            // Send the token to same-origin, relative URLs only.
-            // Send the token only if the method warrants CSRF protection
-            // Using the CSRFToken value acquired earlier
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
-});
-
-
-
 function loadModal(food) {
 	// Remove Active class from prevoious modals
 	let prevActive = document.querySelector(".active")
@@ -75,12 +24,9 @@ function hideModals() {
 	}
 }
 
-function updateCartDisplay() {
-	console.log("cart updated")
-}
 
 function getFoodData() {
-	let size = "small"
+	let size = "Small"
 	if (document.querySelector('.active input[type="radio"]:checked')){
 		size = document.querySelector('.active input[type="radio"]:checked').id
 	}
@@ -162,24 +108,7 @@ function addToCart() {
 	localStorage.setItem("order", JSON.stringify(newOrders))
 
 	order = localStorage.getItem("order")
-	updateCartDisplay()
-	// $.ajax({
-	//     url: '/updateCart',
-	//     dataType: "text json",
-	//     type: "POST",
-	//     data: { size: size,
-	//     		food: food,
-	//     		style: style,
-	//     		quantity: quantity,
-	//     		toppings: toppings,
-	//     		numToppings: numToppings
-	//     },
-	//     success: function(jsonObject,status) {
-	//     	console.log(jsonObject)
-	//         console.log("function() ajaxPost : " + status);
-	//         updateCartDisplay()
-	//     }
-	// });
+	document.querySelector(".order-number").innerHTML = JSON.parse(localStorage.getItem("order")).length
 
 }
 

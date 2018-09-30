@@ -15,5 +15,9 @@ urlpatterns = [
     path("orders/<str:food>", views.style, name="style"),
     path("user", views.user_view, name="user"),
     path("prices/<str:food>/<str:style>/<str:size>/<str:numTop>", views.prices, name="prices"),
-    path("updateCart", views.updateCart, name="updateCart")
+    path("cart", views.cart, name="cart"),
+    path("checkout", views.checkout, name="checkout"),
+    path("sendOrder", views.sendOrder, name="sendOrder"),
+    path("allOrders", views.allOrders, name="allOrders")
+
 ]
