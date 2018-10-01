@@ -1,52 +1,3 @@
-// using jQuery
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-var csrftoken = getCookie('csrftoken');
-
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-
-function sameOrigin(url) {
-    // test that a given url is a same-origin URL
-    // url could be relative or scheme relative or absolute
-    var host = document.location.host; // host + port
-    var protocol = document.location.protocol;
-    var sr_origin = '//' + host;
-    var origin = protocol + sr_origin;
-    // Allow absolute or scheme relative URLs to same origin
-    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
-        // or any other URL that isn't scheme relative or absolute i.e relative.
-        !(/^(\/\/|http:|https:).*/.test(url));
-}
-
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
-            // Send the token to same-origin, relative URLs only.
-            // Send the token only if the method warrants CSRF protection
-            // Using the CSRFToken value acquired earlier
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
-});
-
 function sendOrder(data){
 	$.ajax({
 	    url: '/sendOrder',
@@ -56,26 +7,15 @@ function sendOrder(data){
 	    success: function(jsonObject,status) {
 	    	console.log(jsonObject)
 	        console.log("function() ajaxPost : " + status);
+	        //localStorage.removeItem("orders")
+	        document.querySelector(".order-number").innerHTML = ""
+	        location.href="/success"
 	    }
 	});
 }
 
-function isNumberKey(evt)
-      {
-      	console.log("here")
-      	console.log(evt.which)
-         let charCode = (evt.which) ? evt.which : event.keyCode
-         console.log(charCode)
-         if (charCode > 31 && (charCode < 48 || charCode > 57))
-            evt.preventDefault();
-      }
-
-document.addEventListener("DOMContentLoaded", function(event) {
-	console.log(document.querySelector(".submit"))
-
-	document.querySelector(".submit").onclick = () => {
-		console.log("sent")
-		let [address, aptNum, city, zipCode, delInst, phone] = document.querySelectorAll(".input")
+function getInputs(){
+	let [address, aptNum, city, zipCode, delInst, phone] = document.querySelectorAll(".input")
 		console.log(address)
 		let payment = document.querySelector('input[name = "payment"]:checked'); 
 		
@@ -88,14 +28,117 @@ document.addEventListener("DOMContentLoaded", function(event) {
 							phone: phone.value,
 							payment: payment.value
 					}
-		console.log(orderInfo)
+		return orderInfo
+}
+
+function isNumberKey(evt)
+      {
+         let charCode = (evt.which) ? evt.which : event.keyCode
+         if (charCode > 31 && (charCode < 48 || charCode > 57))
+            evt.preventDefault();
+      }
+
+document.addEventListener("DOMContentLoaded", function(event) {
+	console.log(document.querySelector(".submit"))
+
+	document.querySelector(".submit").onclick = () => {
+		let orderInfo = getInputs()
 		sendOrder(orderInfo);
 	}
 
-	document.querySelector(".phone, .zip-code").onkeypress = (event) =>{
-		isNumberKey(event);
+	let needsNums = document.querySelectorAll(".phone, .zip-code")
+	for(let num of needsNums){
+		num.onkeypress = (event) =>{
+			isNumberKey(event);
+		}
 	}
+
+	let card = document.querySelector(".credit-card")
+	let initial = true
+	console.log("__")
+	console.log(card)
+	card.onclick = function() {
+		console.log("tst")
+		if(initial){
+			addStripe()
+			initial = false
+		}
+		document.querySelector('#payment-form').style.display = "block"
+		document.querySelector('.payment-submit').style.display = "none"
+	}
+
+	let cash = document.querySelector(".cash")
+	console.log("__")
+	console.log(cash)
+	cash.onclick = function() {
+		document.querySelector('#payment-form').style.display = "none"
+		document.querySelector('.payment-submit').style.display = "block"
+	}
+
+
 })
+
+function addStripe(){
+	// Create a Stripe client.
+	var stripe = Stripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+
+	// Create an instance of Elements.
+	var elements = stripe.elements();
+
+	// Custom styling can be passed to options when creating an Element.
+	// (Note that this demo uses a wider set of styles than the guide below.)
+	var style = {
+		base: {
+			color: '#32325d',
+			lineHeight: '18px',
+			fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+			fontSmoothing: 'antialiased',
+			fontSize: '16px',
+			'::placeholder': {
+			color: '#aab7c4'
+			}
+		},
+		invalid: {
+			color: '#fa755a',
+			iconColor: '#fa755a'
+			}
+	};
+
+	// Create an instance of the card Element.
+	var card = elements.create('card', {style: style});
+
+	// Add an instance of the card Element into the `card-element` <div>.
+	card.mount('#card-element');
+
+	// Handle real-time validation errors from the card Element.
+	card.addEventListener('change', function(event) {
+		var displayError = document.getElementById('card-errors');
+		if (event.error) {
+			displayError.textContent = event.error.message;} 
+		else {
+			displayError.textContent = '';
+		}
+	});
+
+	// Handle form submission.
+	var form = document.getElementById('payment-form');
+		form.addEventListener('submit', function(event) {
+		event.preventDefault();
+
+		stripe.createToken(card).then(function(result) {
+			if (result.error) {
+				// Inform the user if there was an error.
+				var errorElement = document.getElementById('card-errors');
+				errorElement.textContent = result.error.message;
+			} else {
+				// Send the token to your server.
+				stripeTokenHandler(result.token);
+			}
+		});
+	});
+}
+
+
 
 
 

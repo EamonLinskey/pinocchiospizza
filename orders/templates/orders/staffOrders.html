@@ -1,0 +1,66 @@
+{% extends "orders/base.html" %}
+
+{% block head %}
+	<meta http-equiv="refresh" content="15" >
+	{% load static %}
+	<script src={% static "orders/scripts/ajax.js" %}></script>
+	<script src={% static "orders/scripts/allOrders.js" %}></script>
+{% endblock %}
+
+{% block body %}
+	<div class="ticket">There are currently {{orders|length}} orders</div>
+	{% for order in orders %}
+		<div class="ticket ticket{{order.2}}">
+		{% for item in order %}
+				{% if forloop.first %}
+					<table class="table table-striped table-bordered">
+						<thead>
+							<tr>
+								<th scope="col">Quantity</th>
+								<th scope="col">Size</th>
+								<th scope="col">Order</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for food in item %}
+								{% if not food.3 %}
+									<tr>
+										<td>{{food.5}}</td>
+										<td>{{food.0}}</td>
+										<td>{{food.2}}</td>
+									</tr>
+								{% else %}
+									<tr>
+										<td>{{food.5}}</td>
+										<td>{{food.0}}</td>
+										<td>{{food.2}} with 
+											{% for topping in food.3 %}
+												{{topping}}
+											{% endfor %}
+										</td>
+									</tr>
+								{% endif %}
+							{% endfor %}
+						</tbody>
+					</table>
+				{% elif not forloop.last %}
+					<div>{{item.0}} 
+						{% if item.1%}
+							Apt num: {{item.1}} 
+						{% endif %}
+					{{item.2}} {{item.3}}</div>
+					{% if item.4%}
+						<div>Delivery Instructions: {{item.4}}</div>
+					{% endif %}
+					<div>Phone: {{item.5}}</div>
+					<div>Payment: {{item.6}}</div>
+				{% endif %}
+		{% endfor %}
+		{% if not filled %}
+			<button type="button" class="btn btn-primary {{order.2}}">Order Completed</button>
+		{% endif %}
+		</div>
+	{% endfor %}
+
+
+{% endblock %}

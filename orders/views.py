@@ -14,6 +14,7 @@ foodContext = {
     }
 
 OrdersToFill = []
+OrdersFilled = []
 orderCount = 0
 
 class Item:
@@ -154,30 +155,50 @@ def sendOrder(request):
 				info.append(request.POST[item])
 		OrdersToFill.append([order, info, orderCount])
 		orderCount += 1
-		print(OrdersToFill)
 		#OrdersToFill.append(order)
 		return HttpResponse(200)
 
-def allOrders (request):
-	if request.user.is_superuser:
-		print(OrdersToFill)
-		return render(request, "orders/allOrders.html", {orders: OrdersToFill})
+def unfilledOrders (request):
+	if request.user.is_staff:
+		context = {	"orders": OrdersToFill,
+						"filled": False		
+						}
+		return render(request, "orders/staffOrders.html", context)
 	else:
 		return HttpResponseRedirect(reverse("index"))
-	# print(request.POST.getlist('toppings[]'))
-	# newItem = Item(request.POST["food"].replace('%20', ' '), request.POST["style"], request.POST["size"], request.POST.getlist('toppings[]'), request.POST["numToppings"], request.POST["quantity"])
-	# print(json.dumps(newItem, default=lambda o: o.__dict__))
-	# isUnique = True
-	# order = request.session.get('order')
-	# if (order):
-	# 	for item in json.loads(order):
-	# 		if item.key == newItem.key:
-	# 			item.addQuantity(newItem.quantity)
-	# 			isUnique = False
-	# 	if isUnique:
-	# 		request.session['order'].append([json.dumps(newItem, default=lambda o: o.__dict__)])
-	# else:
-	# 	request.session['order'] = [json.dumps(newItem, default=lambda o: o.__dict__)]
-	
-	# print(json.loads(request.session['order'][0])["food"])
-	# return HttpResponse(200)
+
+def filledOrders (request):
+	if request.user.is_staff:
+		context = {	"orders": OrdersFilled,
+					"filled": True		
+					}
+		return render(request, "orders/staffOrders.html", context)
+	else:
+		return HttpResponseRedirect(reverse("index"))
+
+def completedOrder (request):
+	if request.is_ajax() and request.method=='POST':
+		print("---------")
+		print(type(request.POST["orderId"]))
+		global OrdersToFill
+
+		for i in range(len(OrdersToFill)):
+			if str(OrdersToFill[i][2]) == request.POST["orderId"]:
+				print("yeah")
+				OrdersFilled.append(OrdersToFill[i])
+				del OrdersToFill[i]
+				print(OrdersToFill)
+				return HttpResponse(200)
+
+		return HttpResponse(501)
+	elif request.user.is_staff:
+		filledOrders = {"orders": OrdersFilled}
+		return render(request, "orders/completeOrders.html", filledOrders)
+	else:
+		return HttpResponseRedirect(reverse("index"))
+
+def success (request):
+	if request.user.is_authenticated:
+		return render(request, "orders/sucess.html")
+	else:
+		return HttpResponseRedirect(reverse("signIn"))
