@@ -8,6 +8,9 @@ from .models import PriceList, SizeList, Style, Food, Extra
 from decimal import *
 import re
 import json
+import stripe
+
+stripe.api_key = "sk_test_cYmMASmzfTiT23KKKMz6iRDt"
 
 foodContext = {
     	"foods": Food.objects.all(),
@@ -278,7 +281,14 @@ def calculatePrice(order):
 			price = price + round((itemPrice* item[5]), 2)
 	return price
 
-def chargeStripe(order, price):
+def chargeStripe(token, price):
+	priceInCents = int(price*100)
+	charge = stripe.Charge.create(
+    	amount=priceInCents,
+    	currency='usd',
+    	description='Pinoccios Pizza',
+    	source=token,
+		)
 	return 
 
 def charge(request):
