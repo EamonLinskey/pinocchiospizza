@@ -61,6 +61,7 @@ function updatePrice(order, id) {
 	let [size, food, style, toppings, numToppings, quantity] =  order
 	// Build API url
 	let url = `/prices/${food}/${style}/${size}/${numToppings}`
+	console.log(url)
 
 	// Fetch price from API
 	fetch(url).then(

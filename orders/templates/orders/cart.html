@@ -6,13 +6,14 @@
 <script src={% static "orders/scripts/cart.js" %}></script>
 <script src={% static "orders/scripts/ajax.js" %}></script>
 <script src={% static "orders/scripts/checkout.js" %}></script>
-<script src="https://js.stripe.com/v3/"></script>
+
 
 {% endblock %}
 
 {% block body %}
 <h1>Hello, {{ user.username }}</h1>
 <p>Heres your cart</p>
+<h1>{{message}}</h1>
 
 <div class ="orders-container">
 	Cart
@@ -28,54 +29,56 @@
 </div>
 
 <div class="order-info-container">
-	<div>
-		<label class="input-label" for="address">Street Address:</label>
-		<input type="text" name="address" class="input address" maxlength="200">
-	</div>
-	<div>
-		<label class="input-label" for="apt-num"">Apt Number:</label>
-		<input type="text" name="apt-num" class="input apt-num" maxlength="10">
-	</div>
-	<div>
-		<label class="input-label" for="city"">City:</label>
-		<select class="city input" name="city">
-			<option value="Cambridge">Cambridge</option>
-			<option value="Boston">Boston</option>
-		</select>
-	</div>
-	<div>
-		<label class="input-label" for="zip-code"">Zip Code:</label>
-		<input type="text" name="zip-code" class="zip-code input" maxlength="10">
-	</div>
-	<div>
-		<label class="input-label" for="del-inst"">Devlvery Instructions:</label>
-		<input type="text" name="del-inst" class="del-inst input" maxlength="200">
-	</div>
-	<div>
-		<label class="input-label" for="phone"">Phone Number:</label>
-		<input class="phone input" type="text" name="phone" maxlength="15">
-	</div>
-	<div>
-		<label class="input-label" for="phone"">Payment:</label>
-		<input type="radio" name="payment" value="cash" class="cash">Cash
-		<input type="radio" name="payment" value="card" class="credit-card">Card
-	</div>
-	<div>
-		<input type="submit" value="Submit" class="submit payment-submit">
-	</div>
-
 	<form action="/charge" method="post" id="payment-form">
-		<div class="stripe-container">
-			<label for="card-element">
-				Credit or debit card
-			</label>
-			<div id="card-element">
-				<!-- A Stripe Element will be inserted here. -->
-			</div>
-				<!-- Used to display form errors. -->
-			<div id="card-errors" role="alert"></div>
+		{% csrf_token %}
+		<div>
+			<label class="input-label" for="address">Street Address:</label>
+			<input type="text" name="address" class="input address" maxlength="200">
 		</div>
-		<button>Submit</button>
+		<div>
+			<label class="input-label" for="apt-num"">Apt Number:</label>
+			<input type="text" name="apt-num" class="input apt-num" maxlength="10">
+		</div>
+		<div>
+			<label class="input-label" for="city"">City:</label>
+			<select class="city input" name="city">
+				<option value="Cambridge">Cambridge</option>
+				<option value="Boston">Boston</option>
+			</select>
+		</div>
+		<div>
+			<label class="input-label" for="zip-code"">Zip Code:</label>
+			<input type="text" name="zip-code" class="zip-code input" maxlength="10">
+		</div>
+		<div>
+			<label class="input-label" for="del-inst"">Devlvery Instructions:</label>
+			<input type="text" name="del-inst" class="del-inst input" maxlength="200">
+		</div>
+		<div>
+			<label class="input-label" for="phone"">Phone Number:</label>
+			<input class="phone input" type="text" name="phone" maxlength="15">
+		</div>
+		<div>
+			<label class="input-label" for="phone"">Payment:</label>
+			<input type="radio" name="payment" value="cash" class="cash">Cash
+			<input type="radio" name="payment" value="card" class="credit-card">Card
+		</div>
+		<div>
+			<input id="payment-submit" type="submit" value="Submit" class="btn btn-success submit-cash submit payment-submit">
+		</div>
+		<div class="stripe-section">
+			<div class="stripe-container">
+				  	<label for="card-element">
+	     				Credit or debit card
+	    			</label>
+				<div id="card-element">
+					<!-- A Stripe Element will be inserted here. -->
+				</div>
+					<!-- Used to display form errors. -->
+				<div id="card-errors" role="alert"></div>
+			</div>
+			<button class="btn btn-success submit">Submit</button>
+		</div>
 	</form>
 </div>
 

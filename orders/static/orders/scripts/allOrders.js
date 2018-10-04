@@ -20,6 +20,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			let ticketDict = {orderId: button.classList[2]};
 			completedOrder(ticketDict);
 			document.querySelector(".ticket"+ticketId).remove();
+			ordersCount = document.querySelectorAll(".ticket").length
+			document.querySelector(".orders-count").innerHTML = "There are currently " + ordersCount + " orders";
 		}
 	}
 });

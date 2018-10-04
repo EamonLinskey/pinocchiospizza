@@ -34,7 +34,7 @@ function getFoodData() {
 	let numChecked = toppings.length
 	let food = window.location.pathname.split('/').pop()
 	let style = document.querySelector('.active .style').innerHTML
-	let quantity = document.querySelector('.active .quantity').value
+	let quantity = parseInt(document.querySelector('.active .quantity').value)
 	let numToppings = (function(num){
 		switch(num) {
 			case 0:

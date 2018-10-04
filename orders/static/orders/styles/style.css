@@ -40,7 +40,7 @@
     border: 1px solid black;
     margin: 1%;
     padding: 1%;
-    width: 100%;
+    width: 98%;
     display: inline-block;
 }
 
@@ -79,8 +79,14 @@
 .order-info-container{
     background-color: darkgrey;
     border: 1px solid black;
-    width: 98%;
-    margin: 1%;
+    width: 35%;
+    margin: auto;
+    margin-bottom: 10%
+}
+
+#payment-form{
+    display: inline-block;
+    text-align: center;
 }
 
 .input{
@@ -97,28 +103,33 @@
 }
 
 .address, .del-inst{
-   width: 35%;
+   width: 60%;
 }
 
 .apt-num{
-   width: 3%;
+   width: 10%;
 }
 
 .zip-code{
-    width: 5%;
+    width: 15%;
 }
 
 .phone{
-    width: 10%;
+    width: 30%;
 }
 
 
 .input-label {
-    width: 15%;
+    width: 38%;
     text-align: right;
 }
 
-.ticket{
+.submit-container {
+    text-align: center;
+    margin: auto;
+}
+
+.ticket, .orders-count{
     border: 1px solid black;
     width: 98%;
     margin: 1%;
@@ -210,6 +221,7 @@
   transition: box-shadow 150ms ease;
 }
 
+
 .StripeElement--focus {
   box-shadow: 0 1px 3px 0 #cfd7df;
 }
@@ -223,9 +235,15 @@
 }
 
 .stripe-container{
+    margin: auto;
     width: 80%;
 }
 
-#payment-form, .payment-submit{
+.stripe-section {
     display: none
+}
+
+#payment-submit{
+    margin:auto;
+    display: none;
 }

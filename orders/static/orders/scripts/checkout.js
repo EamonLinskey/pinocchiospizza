@@ -1,18 +1,4 @@
-function sendOrder(data){
-	$.ajax({
-	    url: '/sendOrder',
-	    dataType: "text json",
-	    type: "POST",
-	    data: data,
-	    success: function(jsonObject,status) {
-	    	console.log(jsonObject)
-	        console.log("function() ajaxPost : " + status);
-	        //localStorage.removeItem("orders")
-	        document.querySelector(".order-number").innerHTML = ""
-	        location.href="/success"
-	    }
-	});
-}
+
 
 function getInputs(){
 	let [address, aptNum, city, zipCode, delInst, phone] = document.querySelectorAll(".input")
@@ -41,9 +27,8 @@ function isNumberKey(evt)
 document.addEventListener("DOMContentLoaded", function(event) {
 	console.log(document.querySelector(".submit"))
 
-	document.querySelector(".submit").onclick = () => {
-		let orderInfo = getInputs()
-		sendOrder(orderInfo);
+	document.querySelector(".submit-cash").onclick = () => {
+		orderHandeler()
 	}
 
 	let needsNums = document.querySelectorAll(".phone, .zip-code")
@@ -63,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			addStripe()
 			initial = false
 		}
-		document.querySelector('#payment-form').style.display = "block"
+		document.querySelector('.stripe-section').style.display = "block"
 		document.querySelector('.payment-submit').style.display = "none"
 	}
 
@@ -71,16 +56,38 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	console.log("__")
 	console.log(cash)
 	cash.onclick = function() {
-		document.querySelector('#payment-form').style.display = "none"
+		document.querySelector('.stripe-section').style.display = "none"
 		document.querySelector('.payment-submit').style.display = "block"
 	}
 
 
 })
 
+function orderHandeler(){
+	let form = document.getElementById('payment-form');
+	let hiddenOrder = document.createElement('input');
+	hiddenOrder.setAttribute('type', 'hidden');
+	hiddenOrder.setAttribute('name', 'hidden-order');
+	hiddenOrder.setAttribute('value', localStorage.order);
+	form.appendChild(hiddenOrder);
+}
+
+function stripeTokenHandler(token) {
+  // Insert the token ID into the form so it gets submitted to the server
+  let form = document.getElementById('payment-form');
+  let hiddenInput = document.createElement('input');
+  hiddenInput.setAttribute('type', 'hidden');
+  hiddenInput.setAttribute('name', 'stripeToken');
+  hiddenInput.setAttribute('value', token.id);
+  form.appendChild(hiddenInput);
+
+  // Submit the form
+  form.submit();
+}
+
 function addStripe(){
 	// Create a Stripe client.
-	var stripe = Stripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+	var stripe = Stripe('pk_test_Nu9EpzKBLqT4FpVuepo0pCc9');
 
 	// Create an instance of Elements.
 	var elements = stripe.elements();
@@ -132,6 +139,7 @@ function addStripe(){
 				errorElement.textContent = result.error.message;
 			} else {
 				// Send the token to your server.
+				orderHandeler();
 				stripeTokenHandler(result.token);
 			}
 		});
