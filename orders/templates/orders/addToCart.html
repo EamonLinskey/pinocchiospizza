@@ -1,5 +1,4 @@
-{% for food in order %}
-				
+{% for food in order %}			
 	<h2>{{food}}</h2>
 		<div>	
 			<form>
@@ -31,21 +30,12 @@
 			    	 <legend>Select</legend>
 			        {% for style in food.style.all %}
 			        	{{style.sizeList.fields }}
-			        	
-			        	
-
 				            <input type="radio" id="{{price}}" name="price" value="{{price}}" />
-				            <label for="{{price}}">{{price}}</label>
-				        
+				            <label for="{{price}}">{{price}}</label>		        
 			        {% endfor %}
 			    </fieldset>
 			</form>
 		</div>
-
-
-
-
-
 {% endfor %}
 
 

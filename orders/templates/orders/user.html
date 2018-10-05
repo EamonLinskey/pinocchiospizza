@@ -1,9 +1,0 @@
-{% extends "orders/base.html" %}
-
-{% block body %}
-<h1>Hello, {{ request.user.username }}</h1>
-<ul>
-    <li>Currently logged in as: {{ request.user.username }}</li>
-    <li><a href="{% url 'signOut' %}">Logout</a></li>
-</ul>
-{% endblock %}

@@ -2,13 +2,19 @@ from django.db import models
 
 # Create your models here.
 class PriceList(models.Model):
-	noExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-	oneExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-	twoExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-	threeExtra = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-	special = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+	noExtra = models.DecimalField(
+		max_digits=5, decimal_places=2, null=True, blank=True)
+	oneExtra = models.DecimalField(
+		max_digits=5, decimal_places=2, null=True, blank=True)
+	twoExtra = models.DecimalField(
+		max_digits=5, decimal_places=2, null=True, blank=True)
+	threeExtra = models.DecimalField(
+		max_digits=5, decimal_places=2, null=True, blank=True)
+	special = models.DecimalField(
+		max_digits=5, decimal_places=2, null=True, blank=True)
 	def __str__(self):
-		return f'{self.noExtra}, {self.oneExtra}, {self.twoExtra}, {self.threeExtra}, {self.special}'
+		return (self.noExtra, self.oneExtra, self.twoExtra, self.threeExtra, 
+				self.special)
 	@property
 	def fields(self):
 		return [f.name for f in self._meta.fields]
@@ -16,8 +22,10 @@ class PriceList(models.Model):
 
 class SizeList(models.Model):
 	name = models.CharField(max_length=32)
-	small = models.ForeignKey(PriceList, on_delete=models.CASCADE, null=True, blank=True, related_name='smallPrices')
-	large = models.ForeignKey(PriceList, on_delete=models.CASCADE, null=True, blank=True, related_name='largePrices')
+	small = models.ForeignKey(PriceList, on_delete=models.CASCADE, null=True, 
+								blank=True, related_name='smallPrices')
+	large = models.ForeignKey(PriceList, on_delete=models.CASCADE, null=True, 
+								blank=True, related_name='largePrices')
 	def __str__(self):
 		return f'{self.name}'
 	@property

@@ -34,10 +34,10 @@
 			      	</li>
 			      	{% if request.user.is_authenticated %}
 			      		{% if request.user.is_staff %}
-			      		<li class="nav-item signOut signedOut">
+			      		<li class="nav-item unfilledOrders signedOut">
 			        		<a class="nav-link" href="{% url 'unfilledOrders' %}">Unfilled Orders</a>
 			      		</li>
-			    		<li class="nav-item signOut signedOut">
+			    		<li class="nav-item filledOrders signedOut">
 			        		<a class="nav-link" href="{% url 'filledOrders' %}">Filled Orders</a>
 			      		</li>
 			    		{% endif %}
@@ -62,7 +62,6 @@
 			    
 			</div>
 		</nav>
-
         {% block body %}
         {% endblock %}
     </body>

@@ -259,13 +259,14 @@ def charge(request):
 		# Checks for valid form inputs
 		for field in deliveryInfo:
 			if field not in request.POST:
-				message = {"message": ("There was an error with your delivery", 
-										"information")}
+				message = {"message": 
+					"There was an error with your delivery information"}
 				return render(request, "orders/cart.html", message)
 		for field in requiredInfo:
 			if request.POST[field] == "":
-				message = {"message": ("Your address, city, zipcode, phone",
-										"number and payment type is required")}
+				message = {"message": 
+				"Your address, city, zipcode, phone number and payment" \
+				"type is required"}
 				return render(request, "orders/cart.html", message)
 
 		# Checks to make sure order was legal
@@ -278,8 +279,8 @@ def charge(request):
 		if (request.POST["payment"] == "card" and 
 		'stripeToken' not in request.POST):
 
-			message = {"message": ("You must type your card information or", 
-									"pay with cash")}
+			message = {"message": 
+			"You must type your card information or pay with cash"}
 			return render(request, "orders/cart.html", message)
 
 		# Checks for a valid price

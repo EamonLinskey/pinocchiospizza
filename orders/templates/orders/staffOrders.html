@@ -9,9 +9,7 @@
 
 {% block body %}
 	<div class="orders-count">There are currently {{orderInfo|length}} orders</div>
-	
 	{% for dict in orderInfo %}
-		
 		<div class="ticket ticket{{dict.orderCount}}">
 		{% for item in dict.order %}
 			{% if forloop.first %}

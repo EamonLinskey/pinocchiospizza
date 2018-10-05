@@ -1,17 +1,29 @@
-function isNumberKey(evt)
-      {
-         let charCode = (evt.which) ? evt.which : event.keyCode
-         if (charCode > 31 && (charCode < 48 || charCode > 57))
-            evt.preventDefault();
-      }
+function isNumberKey(evt){
+	// Prevents nonnumeric inputs (also allows backspace and enter)
+	let charCode = (evt.which) ? evt.which : event.keyCode
+		if (charCode > 31 && (charCode < 48 || charCode > 57))
+			evt.preventDefault();
+}
 
 document.addEventListener("DOMContentLoaded", function(event) {
-	console.log(document.querySelector(".submit"))
+	// Initialize values
+	let cardRadio = document.querySelector(".credit-card")
+	let cashRadio = document.querySelector(".cash")
 
+	/*
+	// Initial acts as a switch preventing Add stripe from being executed
+	// multiple times if the user toggles their payment back and forth
+	// AddStripe could be called on page load but it messes with
+	// the default stripe animation so this work around is better visuslly
+	*/
+	let initial = true
+
+	// Append order to form
 	document.querySelector(".submit-cash").onclick = () => {
 		orderHandeler()
 	}
 
+	// Prevent alphabetic inputs in number fields
 	let needsNums = document.querySelectorAll(".phone, .zip-code")
 	for(let num of needsNums){
 		num.onkeypress = (event) =>{
@@ -19,11 +31,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 	}
 
-	let card = document.querySelector(".credit-card")
-	let initial = true
-	console.log("__")
-	console.log(card)
-	card.onclick = function() {
+	// Toggle Display and add stripe if it is the first click
+	cardRadio.onclick = function() {
 		console.log("tst")
 		if(initial){
 			addStripe()
@@ -33,10 +42,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		document.querySelector('.payment-submit').style.display = "none"
 	}
 
-	let cash = document.querySelector(".cash")
-	console.log("__")
-	console.log(cash)
-	cash.onclick = function() {
+	// Toggle Display	
+	cashRadio.onclick = function() {
 		document.querySelector('.stripe-section').style.display = "none"
 		document.querySelector('.payment-submit').style.display = "block"
 	}
@@ -44,6 +51,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 })
 
+// Adds the users order to the from to submit to server
 function orderHandeler(){
 	let form = document.getElementById('payment-form');
 	let hiddenOrder = document.createElement('input');
@@ -53,6 +61,7 @@ function orderHandeler(){
 	form.appendChild(hiddenOrder);
 }
 
+// From Stripes documentation, edited for my pruposes
 function stripeTokenHandler(token) {
   // Insert the token ID into the form so it gets submitted to the server
   let form = document.getElementById('payment-form');
