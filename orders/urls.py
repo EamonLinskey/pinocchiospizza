@@ -21,7 +21,7 @@ urlpatterns = [
     path("unfilledOrders", views.unfilledOrders, name="unfilledOrders"),
     path("completedOrder", views.completedOrder, name="completedOrder"),
     path("filledOrders", views.filledOrders, name="filledOrders"),
-    path("success", views.success, name="success"),
+    #path("success", views.success, name="success"),
     path("charge", views.charge, name="charge")
 
 

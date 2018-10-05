@@ -1,22 +1,3 @@
-
-
-function getInputs(){
-	let [address, aptNum, city, zipCode, delInst, phone] = document.querySelectorAll(".input")
-		console.log(address)
-		let payment = document.querySelector('input[name = "payment"]:checked'); 
-		
-		let orderInfo = { 	order: localStorage.getItem("order"),
-							address: address.value,
-							aptNum: aptNum.value,
-							city: city.value,
-							zipCode: zipCode.value,
-							delInst: delInst.value,
-							phone: phone.value,
-							payment: payment.value
-					}
-		return orderInfo
-}
-
 function isNumberKey(evt)
       {
          let charCode = (evt.which) ? evt.which : event.keyCode

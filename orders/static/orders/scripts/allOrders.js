@@ -16,10 +16,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	console.log(buttons)
 	for(let button of buttons){
 		button.onclick = () => {
-			let ticketId = button.classList[2]
-			let ticketDict = {orderId: button.classList[2]};
+			let ticketDict = {orderId: button.id};
 			completedOrder(ticketDict);
-			document.querySelector(".ticket"+ticketId).remove();
+			document.querySelector(".ticket"+button.id).remove();
 			ordersCount = document.querySelectorAll(".ticket").length
 			document.querySelector(".orders-count").innerHTML = "There are currently " + ordersCount + " orders";
 		}

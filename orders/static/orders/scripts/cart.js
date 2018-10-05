@@ -3,13 +3,16 @@ let TAX = 0.0625;
 function loadOrders(orders){
 	let newOrders = [];
 	document.querySelector(".orders-container").innerHTML = ""
+
+	// Remove any orders that with quantity 0 or lower
 	if(orders){
-		for (var i = 0; i < orders.length; i++) {
-			if (orders[i][5] > 0){
-				newOrders.push(orders[i])
+		for (let order of orders) {
+			if (order["quantity"] > 0){
+				newOrders.push(order)
 			}
 		}
 
+		// Reset orders in local storage with cleaned orders
 		if(newOrders.length > 0){
 			localStorage.setItem("order", JSON.stringify(newOrders))
 		}
@@ -17,20 +20,21 @@ function loadOrders(orders){
 			localStorage.removeItem(orders)
 			document.querySelector(".orders-container").innerHTML = "Your Cart is Empty"
 		}
-		console.log(`---${newOrders}`)
+		
+
 		for (var i = 0; i < newOrders.length; i++) {
 			console.log(orders[i])
-			if (newOrders[i][5] > 0){
+			if (newOrders[i]["quantity"] > 0){
 				let markupTop = `
 				<div class="order order${i}">
 			    	<div>`;
 			
 				let markupMiddle = `   	
-				        	${newOrders[i][0]}  ${newOrders[i][2]} with ${newOrders[i][3].join(", ")}
+				        	${newOrders[i]["size"]}  ${newOrders[i]["style"]} with ${newOrders[i]["toppings"].join(", ")}
 				        	`;
-				if(newOrders[i][3].length == 0){
+				if(newOrders[i]["toppings"].length == 0){
 					markupMiddle = `   	
-				        	${newOrders[i][0]}  ${newOrders[i][2]}
+				        	${newOrders[i]["size"]}  ${newOrders[i]["style"]}
 				        	`;
 				}
 				let markupBottom = ` 	
@@ -39,7 +43,7 @@ function loadOrders(orders){
 				    		<div>Price: <span class="price order${i}"></span></div>
 				    		Quantity: 
 				    		<span class="add order${i}">+</span>
-							<span class="quantity order${i}">${newOrders[i][5]}</span>
+							<span class="quantity order${i}">${newOrders[i]["quantity"]}</span>
 				    		<span class="subtract order${i}">-</span>
 				    	</div>
 				    	<div class="delete order${i}">delete</div>
@@ -47,7 +51,7 @@ function loadOrders(orders){
 				`;
 				document.querySelector(".orders-container").innerHTML += markupTop + markupMiddle + markupBottom;
 				updatePrice(newOrders[i], i)
-				updateTotal(newOrders[i], parseInt(newOrders[i][5]))
+				updateTotal(newOrders[i], parseInt(newOrders[i]["quantity"]))
 			}
 		}
 	}
@@ -57,10 +61,8 @@ function loadOrders(orders){
 }
 
 function updatePrice(order, id) {
-	// Get data for creating API url
-	let [size, food, style, toppings, numToppings, quantity] =  order
 	// Build API url
-	let url = `/prices/${food}/${style}/${size}/${numToppings}`
+	let url = `/prices/${order["food"]}/${order["style"]}/${order["size"]}/${order["numToppings"]}`
 	console.log(url)
 
 	// Fetch price from API
@@ -70,15 +72,14 @@ function updatePrice(order, id) {
     	})
 		.then(function(jsonData){
 			// Update price in modal
-    		document.querySelector('.price.order'+id).innerHTML = "$" + (jsonData * quantity).toFixed(2)
+    		document.querySelector('.price.order'+id).innerHTML = "$" + (jsonData * order["quantity"]).toFixed(2)
 		});
 	
 }
 
 
 function updateTotal(order, change){
-	let [size, food, style, toppings, numToppings, quantity] =  order
-	let url = `/prices/${food}/${style}/${size}/${numToppings}`
+	let url = `/prices/${order["food"]}/${order["style"]}/${order["size"]}/${order["numToppings"]}`
 	console.log(url)
 	fetch(url).then(
 		function(response){
@@ -120,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 				if(quantity+change >= 0){
 					document.querySelector('.quantity.'+order).innerHTML = quantity+change;
-					orders[orderIndex][5]= parseInt(orders[orderIndex][5]) + change
+					orders[orderIndex]["quantity"]= parseInt(orders[orderIndex]["quantity"]) + change
 					updatePrice(orders[orderIndex], orderIndex)
 					localStorage.setItem("order", JSON.stringify(orders))
 					updateTotal(orders[orderIndex], change)
