@@ -2,86 +2,88 @@
 
 {% block body %}
 	{% for food in foods %}
-		<div class="menu-container text-center">
-			<h1>{{food}}</h1>
-				{% for style in food.style.all %}
-
-					<h2>{{style}}</h2>
-						{% if food.name == "Pizzas" %}
-							<table class="menu-table">
-								<tr>
-									<th>Toppings</th> 
-							    	<th>Small</th> 
-							    	<th>Large</th>
-								</tr>
-								<tr>
-									<td>Cheese</td>
-							    	<td>${{style.sizeList.small.noExtra}}</td> 
-							    	<td>${{style.sizeList.large.noExtra}}</td>
-								</tr>
-								<tr>
-									<td>1 Topping</td>
-							    	<td>${{style.sizeList.small.oneExtra}}</td> 
-							    	<td>${{style.sizeList.large.oneExtra}}</td>
-								</tr>
-								<tr>
-									<td>2 Toppings</td>
-							    	<td>${{style.sizeList.small.twoExtra}}</td> 
-							    	<td>${{style.sizeList.large.twoExtra}}</td>
-								</tr>
-								<tr>
-									<td>3 Toppings</td>
-							    	<td>${{style.sizeList.small.threeExtra}}</td> 
-							    	<td>${{style.sizeList.large.threeExtra}}</td>
-								</tr>
-								<tr>
-									<td>Special</td>
-							    	<td>${{style.sizeList.small.special}}</td> 
-							    	<td>${{style.sizeList.large.special}}</td>
-								</tr>
-							</table>
-							{% if style.name == "Sicilian" %}
-								<div>
-									<h2>Toppings</h2>
-										{% for extra in extras %}
-											<div class="toppings-list">{{extra}}</div>
-										{% endfor %}
-								</div>
-							{% endif %}
-						{% elif food.name == "Subs" or food.name == "Dinner Platters"%}
-							
-							<table class="menu-table">
-								<tr>
-							    	<th>Small</th> 
-							    	<th>Large</th>
-								</tr>
-								<tr>
-									{% if style.sizeList.small.noExtra != None %}
-							    		<td>${{style.sizeList.small.noExtra}}</td>
-							    	{% else %} 
-							    		<td>-----</td>
-							    	{% endif %}
-
-							    	{% if style.sizeList.large.noExtra != None %}
-							    		<td>${{style.sizeList.large.noExtra}}</td>
-							    	{% else %} 
-							    		<td>-----</td>
-							    	{% endif %}
-								</tr>
-							</table>
-								{% if style.name == "Steak + Cheese" %}
-									<p>Mushrooms, Green Peppers, or Onions can be added for $0.50 each </p>
+		<div class="menu-container text-center shadow-sm">
+			<div class="heading">{{food}}</div>
+				<div class="row">
+					{% for style in food.style.all %}
+						<div class="food-name col-6">
+							{{style}}
+							{% if food.name == "Pizzas" %}
+								<table class="table menu-table">
+									<tr>
+										<th>Toppings</th> 
+								    	<th>Small</th> 
+								    	<th>Large</th>
+									</tr>
+									<tr>
+										<td>Cheese</td>
+								    	<td>${{style.sizeList.small.noExtra}}</td> 
+								    	<td>${{style.sizeList.large.noExtra}}</td>
+									</tr>
+									<tr>
+										<td>1 Topping</td>
+								    	<td>${{style.sizeList.small.oneExtra}}</td> 
+								    	<td>${{style.sizeList.large.oneExtra}}</td>
+									</tr>
+									<tr>
+										<td>2 Toppings</td>
+								    	<td>${{style.sizeList.small.twoExtra}}</td> 
+								    	<td>${{style.sizeList.large.twoExtra}}</td>
+									</tr>
+									<tr>
+										<td>3 Toppings</td>
+								    	<td>${{style.sizeList.small.threeExtra}}</td> 
+								    	<td>${{style.sizeList.large.threeExtra}}</td>
+									</tr>
+									<tr>
+										<td>Special</td>
+								    	<td>${{style.sizeList.small.special}}</td> 
+								    	<td>${{style.sizeList.large.special}}</td>
+									</tr>
+								</table>
+								{% if style.name == "Sicilian" %}
+									<div>
+										<h2>Toppings</h2>
+											{% for extra in extras %}
+												<div class="toppings-list">{{extra}}</div>
+											{% endfor %}
+									</div>
 								{% endif %}
-						{% else %}
-							<table class="menu-table">
-								<tr>
-									<td>${{style.sizeList.small.noExtra}}</td>
-								</tr>
-							</table>
-						
-					{% endif %}
-				{% endfor %}
-					{% if food.name == "Subs" %}
+							{% elif food.name == "Subs" or food.name == "Dinner Platters"%}
+								<table class="table menu-table">
+									<tr>
+								    	<th>Small</th> 
+								    	<th>Large</th>
+									</tr>
+									<tr>
+										{% if style.sizeList.small.noExtra != None %}
+								    		<td>${{style.sizeList.small.noExtra}}</td>
+								    	{% else %} 
+								    		<td>-----</td>
+								    	{% endif %}
+
+								    	{% if style.sizeList.large.noExtra != None %}
+								    		<td>${{style.sizeList.large.noExtra}}</td>
+								    	{% else %} 
+								    		<td>-----</td>
+								    	{% endif %}
+									</tr>
+								</table>
+									{% if style.name == "Steak + Cheese" %}
+										<p>Mushrooms, Green Peppers, or Onions can be added for $0.50 each </p>
+									{% endif %}
+							{% else %}
+								<table class="menu-table">
+									<tr>
+										<td>${{style.sizeList.small.noExtra}}</td>
+									</tr>
+								</table>
+						{% endif %}
+				</div>
+					{% endfor %}
+					
+			</div>
+			{% if food.name == "Subs" %}
 						<p>Extra Cheese can be added to any sub for $0.50</p>
 					{% endif %}
 		</div>

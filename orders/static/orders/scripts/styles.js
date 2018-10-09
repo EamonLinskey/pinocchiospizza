@@ -119,7 +119,6 @@ function addToCart() {
 				foodData["numToppings"] == order["numToppings"] &&
 				arrayIsEqual(foodData["toppings"].sort(), 
 				order["toppings"].sort())){
-					console.log("samesies")
 					order["quantity"] = parseInt(order["quantity"]) + 
 						parseInt(foodData["quantity"])
 					isUnique = false
@@ -137,9 +136,10 @@ function addToCart() {
 	else{
 		newOrders = [foodData]
 	}
-	// Update order count on cart and save order in local Storage
-	document.querySelector(".order-number").innerHTML = newOrders.length
+	
+	// Update order order in local Storage
 	localStorage.setItem("order", JSON.stringify(newOrders))
+	localStorage.setItem("changed", true)
 }
 
 function updatePrice() {
@@ -172,6 +172,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		if (span){
 			span.onclick = function() {
 				hideModals()
+				updateNavbar()
 			}
 		}
 	}
@@ -199,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
    	for(let button of buttons){
     	button.onclick = () => {
     		addToCart()
-    		hideModals()
+    		location.href="/orders"
     	}
    	} 
 

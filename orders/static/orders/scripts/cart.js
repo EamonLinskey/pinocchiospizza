@@ -4,7 +4,7 @@ let TAX = 0.0625;
 function loadOrders(orders){
 	// Initialize variables and reset HTML of container
 	let newOrders = [];
-	document.querySelector(".orders-container").innerHTML = ""
+	document.querySelector(".orders-table-inner").innerHTML = ""
 
 	// Remove any orders that with quantity 0 or lower
 	if(orders){
@@ -20,7 +20,7 @@ function loadOrders(orders){
 		}
 		else{
 			localStorage.removeItem(orders)
-			document.querySelector(".orders-container").innerHTML = 
+			document.querySelector(".orders-table").innerHTML = 
 				"Your Cart is Empty"
 		}
 		
@@ -31,8 +31,8 @@ function loadOrders(orders){
 			// i is used as a temporary id for selecting orders in template
 			if (newOrders[i]["quantity"] > 0){
 				let markupTop = `
-				<div class="order order${i}">
-			    	<div>`;
+				<tr class="order order${i}">
+			    	<td class="order-text">`;
 				//Markup Middle has two potential values to account for 
 				// gramatical prefrences of listing the topping selections
 				let markupMiddle = `   	
@@ -45,32 +45,31 @@ function loadOrders(orders){
 				        	`;
 				}
 				let markupBottom = ` 	
-				    	</div>
-				    	<div class="clicker order${i}">
-				    		<div>Price: 
-				    			<span class="price order${i}"></span>
-				    		</div>
-				    		Quantity: 
-				    		<span class="add order${i}">+</span>
-							<span class="quantity order${i}">
-								${newOrders[i]["quantity"]}
-							</span>
-				    		<span class="subtract order${i}">-</span>
-				    	</div>
-				    	<div class="delete order${i}">delete</div>
-				 	</div>
+						<div class="delete order${i}">Delete</div>
+				    </td>
+			    	<td class="clicker order${i}">
+			    		<span class="add order${i}">+</span>
+						<span class="quantity order${i}">
+							${newOrders[i]["quantity"]}
+						</span>
+			    		<span class="subtract order${i}">-</span>
+			    	</td>
+			    	<td>
+			    		<span class="price order${i}"></span>
+			    	</td>
+			    	
+			 	</tr>
 				`;
 
 				// Add to HTML, update price and iterate Total
-				document.querySelector(".orders-container").innerHTML 
-					+= markupTop + markupMiddle + markupBottom;
+				document.querySelector(".orders-table-inner").innerHTML += markupTop + markupMiddle + markupBottom;
 				updatePrice(newOrders[i], i, parseInt(newOrders[i]["quantity"]))
 			}
 		}
 	}
 	else{
 		document.querySelector(".orders-container").innerHTML = 
-			"Your Cart is Empty"
+			"<div class='message'>Your Cart is Empty</div>"
 	}
 }
 
@@ -85,7 +84,6 @@ function updatePrice(order, id, change) {
      		return response.json();
     	})
 		.then(function(jsonData){
-			console.log(change)
 			// Update price in modal
     		document.querySelector('.price.order'+id).innerHTML = 
     			"$" + (jsonData * order["quantity"]).toFixed(2)

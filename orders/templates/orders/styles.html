@@ -6,8 +6,8 @@
 {% endblock %}
 
 {% block body %}
-<h1>Hello, {{ user.username }}</h1>
-<p>What would you like today?</p>
+<div class="heading">Hello, {{ user.username }}!</div>
+<div class="text-center greeting">What would you like today?</div>
 
 <div class ="container">
 	{% for food in foods %}
@@ -27,39 +27,67 @@
 			<!-- Modal content -->
 			<div class="modal-content">
 				<div class="modal-header">
-					<h2 class="style" >{{style}}</h2>
+					<div class="style" >{{style}}</div>
+
 					<span class="close">&times;</span>
 				</div>
 				<div class="modal-body">
-					<div class="current-price">${{style.sizeList.small.noExtra}}</div>
+					<div class="current-price text-center">${{style.sizeList.small.noExtra}}</div>
 					{% if style.legalExtras.all%}
-						<div>Extras:</div>
-						<div>
-							{% for extra in style.legalExtras.all %}
-								<input class="extra-check" type="checkbox" id="{{extra}}" name="extra" value="{{extra}}">
-						        <label for="{{extra}}">{{extra}}</label>
-							{% endfor %}
-						</div>
+						{% if style.legalExtras.all|length > 4%}
+							<div class="section-container section-container-many">
+								<div class="text-center section-header">Extras:</div>
+								<div class="row">
+									{% for extra in style.legalExtras.all %}
+										<div class="col-2 order-toggle">
+											<input class="extra-check" type="checkbox" id="{{extra}}" name="extra" value="{{extra}}">
+									        <label for="{{extra}}">{{extra}}</label>
+									    </div>
+									{% endfor %}
+								</div>
+							</div>
+							<br>
+						{% else %}
+							<div class="section-container section-container-few">
+								<div class="text-center section-header">Extras:</div>
+								
+									{% for extra in style.legalExtras.all %}
+										<div class="order-toggle">
+											<input class="extra-check" type="checkbox" id="{{extra}}" name="extra" value="{{extra}}">
+									        <label for="{{extra}}">{{extra}}</label>
+									    </div>
+									{% endfor %}
+							</div>
+						{% endif %}
 					{% endif %}
-						<div>Size:</div>
-						<form>
-						{% for size in style.sizeList.sizes %}
-						 	<input class="size-radio" type="radio" id="{{size}}" name="size" value="{{size}}">
-					        <label for="{{size}}">{{size}}</label>
-					    {% endfor %}
-					    </form>
-					<select class="quantity">
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
-						<option value="4">4</option>
-						<option value="5">5</option>
-						<option value="6">6</option>
-						<option value="7">7</option>
-						<option value="8">8</option>
-						<option value="9">9</option>
-						<option value="10">10</option>
-					</select>
+						<div class="section-container section-container-few">
+							<div class="text-center section-header">Size:</div>
+							<div class="order-toggle">
+								<form>
+								{% for size in style.sizeList.sizes %}
+								 	<input class="size-radio" type="radio" id="{{size}}" name="size" value="{{size}}">
+							        <label for="{{size}}">{{size}}</label>
+							    {% endfor %}
+							    </form>
+							</div>
+						</div>
+
+						<div class="section-container section-container-few">
+							<div class="text-center section-header">Quantity:</div>
+								<select class="quantity quantity-modal">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+									<option value="10">10</option>
+								</select>
+							</div>
+						</div>
 					<button class="addToCart btn btn-success">Add to Cart</button>
 				</div>
 			</div>

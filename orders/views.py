@@ -35,14 +35,20 @@ def signIn(request):
 
 def signedIn(request):
 	if (request.method == "POST"):
+		password, username = "", ""
+
+		if request.POST["password"]:
+			password = request.POST["password"]
+		if request.POST["username"]:
+			username= request.POST["username"]
 		try:
-			user = authenticate(request, username=request.POST["username"], 
-								password=request.POST["password"])
+			user = authenticate(request, username=username, password=password)
 			login(request, user)
 			return HttpResponseRedirect(reverse("orders"))
 		except:
 			return render(request, "orders/signIn.html", 
-							{"message": "Invalid Credentials"})
+							{"message": "Invalid Credentials",
+							 "username": username})
 	else:
 		return HttpResponseRedirect(reverse("index"))
 
@@ -77,22 +83,27 @@ def registered(request):
 		password = request.POST["password"]
 		
 		# Validate inputs
-		if (len(User.objects.filter(username=username)) > 0):
-			return render(request, "orders/register.html", 
-						{"message": "That username is taken"})
-		if (len(User.objects.filter(email=email))>0):
-			return render(request, "orders/register.html", 
-						{"message": "That email is taken"})
 		if (email == "" or username == "" or password == "" or 
 		confirmPassword == ""):
 			return render(request, "orders/register.html", 
-						{"message": "Fields cannot be blank"})
+						{"message": "Fields cannot be blank",
+						"email": email, "username": username})
+		if (len(User.objects.filter(username=username)) > 0):
+			return render(request, "orders/register.html", 
+						{"message": "That username is taken",
+						"email": email, "username": username})
+		if (len(User.objects.filter(email=email))>0):
+			return render(request, "orders/register.html", 
+						{"message": "That email is taken",
+						"email": email, "username": username})
 		if (not re.match(r"[^@]+@[^@]+\.[^@]+", email)):
 			return render(request, "orders/register.html", 
-						{"message": "You must input valid email"})
+						{"message": "You must input valid email",
+						"email": email, "username": username})
 		if (confirmPassword != password):
 			return render(request, "orders/register.html", 
-						{"message": "Passwords did not match"})
+						{"message": "Passwords did not match",
+						"email": email, "username": username})
 		else:
 			try: 
 				# Create new user
@@ -102,7 +113,8 @@ def registered(request):
 				return HttpResponseRedirect(reverse("orders"))
 			except:
 				return render(request, "orders/register.html", 
-							{"message": "An unknown error occured"})	
+							{"message": "An unknown error occured",
+							"email": email, "username": username})	
 	else:
 		return HttpResponseRedirect(reverse("orders"))
 
@@ -265,12 +277,17 @@ def charge(request):
 		for field in requiredInfo:
 			if request.POST[field] == "":
 				message = {"message": 
-				"Your address, city, zipcode, phone number and payment" \
+				"Your address, city, zipcode, phone number and payment " \
 				"type is required"}
 				return render(request, "orders/cart.html", message)
 
 		# Checks to make sure order was legal
-		order = json.loads(request.POST["hidden-order"])
+		try:
+			order = json.loads(request.POST["hidden-order"])
+		except:
+			message = {'message': "Your order was empty"}
+			return render(request, "orders/cart.html", message)
+
 		if not isValidOrder(order):
 			message = {'message': "Your order was not valid"}
 			return render(request, "orders/cart.html", message)

@@ -1,19 +1,37 @@
 {% extends "orders/base.html" %}
 
 {% block body %}
-<h1>Login</h1>
 {% if message %}
-    <div>
-        {{ message }}
-    </div>
+    <div class="message">{{message}}</div>
 {% endif %}
-<form action="{% url 'signedIn' %}" method="post">
-    {% csrf_token %}
-    <input name="username" type="text"/>
-    <input name="password" type="password"/>
-    <input type="submit" value="Login"/>
-</form>
-<div class="container">
-	<div>Don't have an account yet? <a href="{% url 'register' %}">Click here!</a></div>
-</div>
+	<div class="auth-form">
+        <div class="heading">Sign In</div>
+        <form class="form-group form-center" action="{% url 'signedIn' %}" method="post">
+            {% csrf_token %}  
+            <div class="form-group">
+                 <input name="username" type="text" placeholder="Username" value="{{username}}"/>
+            </div>
+            <div class="form-group">
+                <input name="password" type="password" placeholder="Password"/>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sign In" class="btn btn-success"/>
+            </div>
+        </form>
+        <div class="container">
+			<div>Don't have an account yet? <a href="{% url 'register' %}">Click here!</a></div>
+		</div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
 {% endblock %}

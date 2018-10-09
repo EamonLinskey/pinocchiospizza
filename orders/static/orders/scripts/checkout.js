@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	// Append order to form
 	document.querySelector(".submit-cash").onclick = () => {
 		orderHandeler()
+		document.getElementById('payment-form').submit()
 	}
 
 	// Prevent alphabetic inputs in number fields
@@ -33,7 +34,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	// Toggle Display and add stripe if it is the first click
 	cardRadio.onclick = function() {
-		console.log("tst")
 		if(initial){
 			addStripe()
 			initial = false

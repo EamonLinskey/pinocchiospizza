@@ -1,26 +1,15 @@
 {% extends "orders/base.html" %}
 
 {% block body %}
-<h1>About Pinocchio's </h1>
-{% if message %}
-    <div>
-        {{ message }}
-    </div>
-{% endif %}
+<div class="heading">About Pinocchio's </div>
 
 <div class="container">
-	<div class="About">
-	<p>Pinocchio's Pizza & Subs or Noch's for short is a Harvard Square landmark enjoyed by students and tourists like. Over the years Noch's have served a wide array of customers, many of whom you my know, such as Steve Carrel and Mark Zuccerburg! Come in and see our wall of fame to see who else eats here!</p>
-
-	<p>Noch's has reached a landmark this year......50 years in business! We've been feeding Harvard and the surrounding area since 1966!</p>
-
-	<p>We sell award-winning sicilian-style pizza and mouth-watering steak subs! We have over 500 reviews on Yelp--- check it out!</p>
-
-	<p>Pinocchio's was recently named 1st Runner-up in the 'Boston's Best Pizza Poll' conducted by Eater.com and Top College Pizza Shop by Thrillist.com.</p> 
-
-	<p>With out new websites you can now order direclty online! <a href="{% url 'register' %}">Click here to get started.</a> </p>
+	<div class="about">
+		<p>Pinocchio's Pizza & Subs or Noch's for short is a Harvard Square landmark enjoyed by students and tourists like. Over the years Noch's have served a wide array of customers, many of whom you my know, such as Steve Carrel and Mark Zuccerburg! Come in and see our wall of fame to see who else eats here! Noch's has reached a landmark this year......50 years in business! We've been feeding Harvard and the surrounding area since 1966!
+		<p>We sell award-winning sicilian-style pizza and mouth-watering steak subs! We have over 500 reviews on Yelp--- check it out! Pinocchio's was recently named 1st Runner-up in the 'Boston's Best Pizza Poll' conducted by Eater.com and Top College Pizza Shop by Thrillist.com. With out new websites you can now order direclty online! <a href="{% url 'register' %}">Click here to get started.</a> </p>
+		{% load static %}
+		<image class="about-image" src="{% static "orders/images/resturant-pic.jpg" %}">
 	</div>
-
 </div>
 
 {% endblock %}

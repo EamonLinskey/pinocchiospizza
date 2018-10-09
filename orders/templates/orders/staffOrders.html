@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block body %}
-	<div class="orders-count">There are currently {{orderInfo|length}} orders</div>
+	<div class="orders-count">Current Number of Orders: {{orderInfo|length}}</div>
 	{% for dict in orderInfo %}
 		<div class="ticket ticket{{dict.orderCount}}">
 		{% for item in dict.order %}

@@ -1,21 +1,36 @@
 {% extends "orders/base.html" %}
 
 {% block body %}
-<h1>Register</h1>
+
 {% if message %}
-    <div>
-        {{ message }}
-    </div>
+    <div class="message">{{message}}</div>
 {% endif %}
-    <form action="{% url 'registered' %}" method="post">
-        {% csrf_token %}
-        <input name="email" type="text"/>
-        <input name="username" type="text"/>
-        <input name="password" type="password"/>
-        <input name="confirmPassword" type="Password"/>
-        <input type="submit" value="Register"/>
-    </form>
-    <div class="container">
-    	<div>Already have an account? <a href="{% url 'signIn' %}">Click here!</a></div>
+    <div class="auth-form">
+        <div class="heading">Register</div>
+        <form class="form-group form-center" action="{% url 'registered' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input name="email" type="text" placeholder="Email" value="{{email}}"/>
+            </div>
+            
+            <div class="form-group">
+                <input name="username" type="text" placeholder="Username" value="{{username}}"/>
+            </div>
+
+            <div class="form-group">
+                <input name="password" type="password" placeholder="Password"/>
+            </div>
+
+            <div class="form-group">
+                <input name="confirmPassword" type="Password" placeholder="Confirm Password"/>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-success"/>
+            </div>
+        </form>
+        <div class="container">
+        	<div>Already have an account? <a href="{% url 'signIn' %}">Click here!</a></div>
+        </div>
     </div>
 {% endblock %}

@@ -2,14 +2,14 @@
 
 
 {% block body %}
-<h1>Hello, {{ user.username }}</h1>
-<p>What would you like today?</p>
+<div class="heading">Hello, {{ user.username }}!</div>
+<div class="text-center greeting">What would you like today?</div>
 
 <div class ="container">
 	{% for food in foods %}
 		{% url 'style' food as food_url %}
 		<a class="food-link" href="{{food_url}}">
-			<div class="food-container">
+			<div class="food-container shadow-sm">
 				<div class="text-center food-link">{{food}}</div>
 			</div>
 		</a>

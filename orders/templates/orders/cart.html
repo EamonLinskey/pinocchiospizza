@@ -11,22 +11,44 @@
 {% endblock %}
 
 {% block body %}
-<h1>Hello, {{ user.username }}</h1>
-<p>Heres your cart</p>
-<h1>{{message}}</h1>
+<div class="heading">Hello, {{ user.username }}</div>
+<div class="message">{{message}}</div>
 
 <div class ="orders-container">
-	Cart
+	<table class="orders-table table table-bordered table-striped">
+
+		<thead>
+			<tr class="table-head">
+		      <th scope="col">Order</th>
+		      <th class="quantity-cell" scope="col">Quantity</th>
+		      <th scope="col">Price</th>
+		    </tr>
+		</thead>
+		<tbody class="orders-table-inner">
+		</tbody>
+	</table>
 </div>
-<div class ="subtotal-container">
-	Subtotal: $<span class="subtotal">0.00<span>
-</div>
-<div class ="tax-container">
-	Tax: $<span class="tax">0.00<span>
-</div>
-<div class ="total-container">
-	Total: $<span class="total">0.00<span>
-</div>
+
+<table class="table price-table table-bordered table-striped">
+	<thead>
+		    <div class="total-header">Total<div>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Subtotal:</td>
+			<td>$<span class="subtotal">0.00</span></td>
+		</tr>
+		<tr>
+			<td>Tax:</td>
+			<td>$<span class="tax">0.00</span></td>
+		</tr>
+		<tr>
+			<td>Total:</td>
+			<td>$<span class="total">0.00</span></td>
+		</tr>
+	</tbody>
+</table>
+
 
 <div class="order-info-container">
 	<form action="/charge" method="post" id="payment-form">
@@ -51,7 +73,7 @@
 			<input type="text" name="zip-code" class="zip-code input" maxlength="10">
 		</div>
 		<div>
-			<label class="input-label" for="del-inst"">Devlvery Instructions:</label>
+			<label class="input-label" for="del-inst"">Delivery Instructions:</label>
 			<input type="text" name="del-inst" class="del-inst input" maxlength="200">
 		</div>
 		<div>
@@ -68,14 +90,16 @@
 		</div>
 		<div class="stripe-section">
 			<div class="stripe-container">
-				  	<label for="card-element">
+				<div class="text-center">
+				  	<label class="stripe-label" for="card-element">
 	     				Credit or debit card
 	    			</label>
+	    		</div>
 				<div id="card-element">
 					<!-- A Stripe Element will be inserted here. -->
 				</div>
 					<!-- Used to display form errors. -->
-				<div id="card-errors" role="alert"></div>
+				<div class="text-center" id="card-errors" role="alert"></div>
 			</div>
 			<button class="btn btn-success submit">Submit</button>
 		</div>
